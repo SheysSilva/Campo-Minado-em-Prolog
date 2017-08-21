@@ -3,16 +3,16 @@
 use_module(library(random)).
 
 /*Retorna uma matriz de elementos (X, Y, Z), X eh a coordenada do eixo X, Y eh a coordenada do eixo Y e Z e o valor na posicao XY.*/
-criaMatriz(Matriz):- Matriz = 
-[(1, 1, 0), (1, 2, 0), (1, 3, 0), (1, 4, 0), (1, 5, 0), (1, 6, 0), (1, 7, 0), (1, 8, 0), (1, 9, 0), 
-(2, 1, 0), (2, 2, 0), (2, 3, 0), (2, 4, 0), (2, 5, 0), (2, 6, 0), (2, 7, 0), (2, 8, 0), (2, 9, 0), 
-(3, 1, 0), (3, 2, 0), (3, 3, 0), (3, 4, 0), (3, 5, 0), (3, 6, 0), (3, 7, 0), (3, 8, 0), (3, 9, 0), 
-(4, 1, 0), (4, 2, 0), (4, 3, 0), (4, 4, 0), (4, 5, 0), (4, 6, 0), (4, 7, 0), (4, 8, 0), (4, 9, 0), 
-(5, 1, 0), (5, 2, 0), (5, 3, 0), (5, 4, 0), (5, 5, 0), (5, 6, 0), (5, 7, 0), (5, 8, 0), (5, 9, 0), 
-(6, 1, 0), (6, 2, 0), (6, 3, 0), (6, 4, 0), (6, 5, 0), (6, 6, 0), (6, 7, 0), (6, 8, 0), (6, 9, 0), 
-(7, 1, 0), (7, 2, 0), (7, 3, 0), (7, 4, 0), (7, 5, 0), (7, 6, 0), (7, 7, 0), (7, 8, 0), (7, 9, 0), 
-(8, 1, 0), (8, 2, 0), (8, 3, 0), (8, 4, 0), (8, 5, 0), (8, 6, 0), (8, 7, 0), (8, 8, 0), (8, 9, 0), 
-(9, 1, 0), (9, 2, 0), (9, 3, 0), (9, 4, 0), (9, 5, 0), (9, 6, 0), (9, 7, 0), (9, 8, 0), (9, 9, 0)]. 
+criaMatriz(X, Matriz):- Matriz = 
+[(1, 1, X), (1, 2, X), (1, 3, X), (1, 4, X), (1, 5, X), (1, 6, X), (1, 7, X), (1, 8, X), (1, 9, X), 
+(2, 1, X), (2, 2, X), (2, 3, X), (2, 4, X), (2, 5, X), (2, 6, X), (2, 7, X), (2, 8, X), (2, 9, X), 
+(3, 1, X), (3, 2, X), (3, 3, X), (3, 4, X), (3, 5, X), (3, 6, X), (3, 7, X), (3, 8, X), (3, 9, X), 
+(4, 1, X), (4, 2, X), (4, 3, X), (4, 4, X), (4, 5, X), (4, 6, X), (4, 7, X), (4, 8, X), (4, 9, X), 
+(5, 1, X), (5, 2, X), (5, 3, X), (5, 4, X), (5, 5, X), (5, 6, X), (5, 7, X), (5, 8, X), (5, 9, X), 
+(6, 1, X), (6, 2, X), (6, 3, X), (6, 4, X), (6, 5, X), (6, 6, X), (6, 7, X), (6, 8, X), (6, 9, X), 
+(7, 1, X), (7, 2, X), (7, 3, X), (7, 4, X), (7, 5, X), (7, 6, X), (7, 7, X), (7, 8, X), (7, 9, X), 
+(8, 1, X), (8, 2, X), (8, 3, X), (8, 4, X), (8, 5, X), (8, 6, X), (8, 7, X), (8, 8, X), (8, 9, X), 
+(9, 1, X), (9, 2, X), (9, 3, X), (9, 4, X), (9, 5, X), (9, 6, X), (9, 7, X), (9, 8, X), (9, 9, X)]. 
 
 /*Funcao para numeros aleatorios entre 1 e 10.*/
 numeroAleatorio(X):- random(1, 10, X).	
@@ -133,7 +133,7 @@ imprime([(_,_,X1),(_,_,X2), (_,_,X3), (_,_,X4), (_,_,X5), (_,_,X6), (_,_,X7), (_
 
 modificaMatriz([],[]).
 modificaMatriz([(_, _, Z)|Corpo], [(_, _, Z2)|Corpo2]):- 
-	Z =:= 0, Z2 = " ", 
+	Z =:= (-2), Z2 = " ", 
 	modificaMatriz(Corpo,Corpo2).
 modificaMatriz([(_, _, Z)|Corpo], [(_, _, Z2)|Corpo2]):- 
 	Z =:= (-1), Z2 = "*", 
@@ -147,31 +147,45 @@ modificaMatriz([(_, _, Z)|Corpo], [(_, _, Z2)|Corpo2]):-
 menu(Matriz_Final, Matriz):- 
 	read_X(CoordX), 
 	read_Y(CoordY), 
-	naoPossuiBomba(CoordX, CoordY, Matriz_Final),
+	mostraMatrizModificada(Matriz_Final, CoordX, CoordY, Matriz).
+/*Modifica a matriz apresentada ao usuario, imprime ela e caso tenha ganhado ou perdido, imprime uma mensagem final.*/
+mostraMatrizModificada(Matriz_Final, CoordX, CoordY, Matriz):- 
 	atualizaMatriz(CoordX, CoordY, Matriz_Final, Matriz, Matriz_mod), 
+	(not(possuiBomba(CoordX, CoordY, Matriz_Final))),
+	naoGanhouJogo(Matriz_mod),
 	modificaMatriz(Matriz_mod, Mtz_Impressa),
 	imprime(Mtz_Impressa), 
 	menu(Matriz_Final, Matriz_mod).
-menu(Matriz_Final, _):- 
+mostraMatrizModificada(Matriz_Final, CoordX, CoordY, _):- 
+	possuiBomba(CoordX, CoordY, Matriz_Final),
 	modificaMatriz(Matriz_Final, Mtz_Impressa),
-	imprime(Mtz_Impressa).
+	imprime(Mtz_Impressa), write("PERDEU OTARIO!").
+mostraMatrizModificada(Matriz_Final, _, _, Matriz):-
+	not(naoGanhouJogo(Matriz)),
+	modificaMatriz(Matriz_Final, Mtz_Impressa),
+	imprime(Mtz_Impressa), write("GANHOU OTARIO!").
+
+/*Funcao que verifica se nao ganhou o jogo.*/
+naoGanhouJogo([]):-false.
+naoGanhouJogo([(_, _, -2)|_]).
+naoGanhouJogo([(_, _, _)|Corpo]):-naoGanhouJogo(Corpo).
 
 /*Funcao que atualiza a matriz mostrada para o usuario, de acordo com as coordenadas informadas pelo usuario.*/
 atualizaMatriz(_, _, [], [], []).
 atualizaMatriz(X, Y, [(X, Y, Z)|_], [(X, Y, _)|Corpo1], [(X, Y, Z)|Corpo1]).
 atualizaMatriz(X, Y, [(_, _, _)|Corpo], [(A, B, C)|Corpo1], [(A, B, C)|Res]):- atualizaMatriz(X, Y, Corpo, Corpo1, Res).
 
-/*Funcao que verifica se a posicao fornecida pelo usuario nao possui bomba.*/
+/*Funcao que verifica se a posicao fornecida pelo usuario possui bomba.*/
 /*Verifica essa função*/
-naoPossuiBomba(_, _, []).
-naoPossuiBomba(X, Y, [(X, Y, Z)|_]):- Z =\=(-1). 
-naoPossuiBomba(X, Y, [(_, _, _)|Corpo]):- naoPossuiBomba(X, Y, Corpo).
+possuiBomba(_, _, []):- false.
+possuiBomba(X, Y, [(X, Y, -1)|_]).
+possuiBomba(X, Y, [(_, _, _)|Corpo]):- possuiBomba(X, Y, Corpo).
  
 read_X(CoordX) :-
 	writeln("Digite uma coordenada x entre 1 e 9: "),
 	read_line_to_codes(user_input, X2),
 	(string_to_atom(X2,X1),
-	atom_number(X1,X), X =< 9, X >= 1) -> ( CoordX is X); (write("Número invalido"),nl, read_X(CoordX)).
+	atom_number(X1,X), X =< 9, X >= 1) -> (CoordX is X); (write("Número invalido"),nl, read_X(CoordX)).
 
 read_Y(CoordY) :-
 	writeln("Digite uma coordenada y entre 1 e 9: "),
@@ -182,13 +196,13 @@ read_Y(CoordY) :-
 
 main:- 
 	/*textos.*/
-	criaMatriz(Matriz),
+	criaMatriz(0, Matriz), 
 	gerando8Bombas(Matriz, Matriz_Mod, 1),
-	soma(Matriz_Mod, Matriz_Final),menu(Matriz_Final, Matriz).
-	
+	soma(Matriz_Mod, Matriz_Final),
+	criaMatriz(-2, Matriz_OUTRA),
+	menu(Matriz_Final, Matriz_OUTRA).
 
-/*Falta verificar a funcao naoPossuiBomba.*/
-/*Falta verificar criar a funcao ganhouOJogo.*/
+/*Falta subistituir AS MSG DE GANHOU E PERDEU.*/
 
 
 
