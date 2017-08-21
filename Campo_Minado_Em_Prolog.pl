@@ -148,6 +148,7 @@ menu(Matriz_Final, Matriz):-
 	read_X(CoordX), 
 	read_Y(CoordY), 
 	mostraMatrizModificada(Matriz_Final, CoordX, CoordY, Matriz).
+	
 /*Modifica a matriz apresentada ao usuario, imprime ela e caso tenha ganhado ou perdido, imprime uma mensagem final.*/
 mostraMatrizModificada(Matriz_Final, CoordX, CoordY, Matriz):- 
 	atualizaMatriz(CoordX, CoordY, Matriz_Final, Matriz, Matriz_mod), 
